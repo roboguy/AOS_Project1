@@ -13,7 +13,7 @@ public class App {
 	private static final Logger logger = LogManager.getLogger(App.class);
 
 	public static void main(String[] args) throws InterruptedException {
-		System.out.println("Hello World!");
+		System.out.println("Starting..");
 		logger.info("HELLO WORLD");
 
 		Thread t1 = new Thread(new Runnable() {
@@ -52,7 +52,20 @@ public class App {
 		t2.start();
 		t1.join();
 		t2.join();
+		ClientThread[] clients = new ClientThread[5];
+		for(int count = 0; count < 5; count++){
+			clients[count] = new ClientThread();
+		}
+		
+		for(ClientThread client : clients){
+			client.start();
+		}
+		
+		for(ClientThread client : clients){
+			client.join();
+		}
+		
 		logger.info("Finished Logging");
-
+		System.out.println("Hello World!");
 	}
 }
