@@ -15,12 +15,7 @@ public class RequestObject {
 	public void setMyInformation(Node myInformation) {
 		this.node = myInformation;
 	}
-//	public String getType() {
-//		return type;
-//	}
-//	public String getMessage() {
-//		return message;
-//	}
+
 	public RequestObject(Node myInformation){
 		this.node = myInformation;
 	}

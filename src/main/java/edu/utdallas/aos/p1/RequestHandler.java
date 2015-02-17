@@ -17,6 +17,7 @@ public class RequestHandler extends Thread{
 	public Object lock = new Object();
 	private String message;
 	private static volatile boolean  terminated = false;
+	
 	@Override
 	public void run(){
 		synchronized (lock) {
@@ -36,7 +37,7 @@ public class RequestHandler extends Thread{
 				Node n = App.neighboursTable.get(sender.getID());
 				//Update waiting value for each key to false.
 				n.setWaiting(false);
-				logger.info("Already visited sender.");
+				logger.info("Node exists.");
 			}else {
 				logger.info("New Node added - " + sender.getID() + " " + sender.getIPAddr() + " " + sender.getPort());
 				sender.setRequestSent(false);
@@ -47,7 +48,8 @@ public class RequestHandler extends Thread{
 			//Update App.neighbours table that response was received for sender all nodes in response.
 			if(deserlizedRequest.getNeighbors().size() > 0){
 				for(Node n : deserlizedRequest.getNeighbors()){
-					if(App.neighboursTable.contains(n.getID())){
+					Node tes = App.neighboursTable.get(n.getID());
+					if(tes !=null){
 						Node no = App.neighboursTable.get(n.getID());
 						//Update waiting value for each key to false.
 						no.setWaiting(false);
@@ -73,13 +75,19 @@ public class RequestHandler extends Thread{
 						toSend.add(n);
 					}
 				}
+				logger.info(String.format("%-7s", n.getID()) + "\t"
+						+ n.getIPAddr() + ".utdallas.edu" + "\t"
+						+ n.getPort() + "\t"
+						+ String.format("%-20s", n.isWaiting())
+						+ String.format("%-20s", n.isRequestSent()));
 			}
 			//If request was not sent & waiting then start a new client thread.
 			if(waitingCount == 0 && toSend.size() > 0){
 				logger.error("Unexpected state: not waiting for any nodes but new nodes availabe to send requests.");
 			}
 			if(toSend.size()>0){
-				
+				ClientThread client = new ClientThread(toSend);
+				client.start();
 			}
 			if(waitingCount == 0){
 				terminate();
@@ -102,7 +110,11 @@ public class RequestHandler extends Thread{
 			Entry<String, Node> entry = iterator.next();
 			//String id = entry.getKey();
 			Node no = entry.getValue();
-			logger.info(String.format("%-7s", no.getID())+ "\t" + no.getIPAddr()+".utdallas.edu" + "\t" + no.getPort() + "\t" + no.isWaiting());
+			logger.info(String.format("%-7s", no.getID())+ "\t" 
+					+ no.getIPAddr()+".utdallas.edu" + "\t" 
+					+ no.getPort() + "\t" 
+					+ no.isWaiting() + "\t"
+					+ no.isRequestSent());
 		}
 		
 		logger.info("Terminated");

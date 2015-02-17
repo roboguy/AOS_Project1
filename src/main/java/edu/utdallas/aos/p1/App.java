@@ -26,7 +26,7 @@ import com.sun.nio.sctp.SctpServerChannel;
  * @author sudhanshu iyer - sxi120530
  *
  */
-//@SuppressWarnings("unused")
+
 public class App {
 	public static final int MESSAGE_SIZE = 10000;
 	private static final Logger logger = LogManager.getLogger(App.class);
@@ -34,7 +34,9 @@ public class App {
 	public static volatile Node myInformation;
 	public static volatile boolean isInitial = true;
 	private static volatile boolean isStopped = false;
-
+	
+	public static SctpServerChannel sctpServerChannel;
+	
 	public static void main(String[] args) throws InterruptedException {
 
 		if (args.length != 1) {
@@ -73,7 +75,7 @@ public class App {
 				int port = Integer.parseInt(myInformation.getPort());
 				logger.info("Starting Server on port " + port);
 				//Open a server channel
-				SctpServerChannel sctpServerChannel = SctpServerChannel.open();
+				sctpServerChannel = SctpServerChannel.open();
 				//Create a socket addess in the current machine at port 5000
 				InetSocketAddress serverAddr = new InetSocketAddress(port);
 				//Bind the channel's socket to the server in the current machine at port 5000
@@ -88,10 +90,12 @@ public class App {
 					MessageInfo messageInfo = sctpChannel.receive(byteBuffer,null,null);
 					logger.debug(messageInfo);
 					message = byteToString(byteBuffer);
+					byteBuffer.clear();
 					//logger.debug(message);
 					
 					RequestHandler handler = new RequestHandler(message);
 					handler.start();
+					
 					//handler.join();
 					//logger.debug(RequestHandler.isTerminated());
 				}
