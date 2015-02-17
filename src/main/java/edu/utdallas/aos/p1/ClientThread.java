@@ -113,44 +113,44 @@ public class ClientThread extends Thread {
 	
 	public synchronized void go(String msg, String host, String port)
 	{
-//		//Buffer to hold messages in byte format
-//		StringBuilder hostString = new StringBuilder();
-//		if(!host.contains("local") && !host.contains("utdallas")){
-//			hostString.append(host);
-//			hostString.append(".utdallas.edu");
-//		} else {
-//			hostString.append(host);
-//		}
-//		String ho = hostString.toString();
-//		
-//		ByteBuffer byteBuffer = ByteBuffer.allocate(MESSAGE_SIZE);
-//		int po = Integer.parseInt(port);
-//		logger.debug("Sending message to server..");
-//		try
-//		{
-//			//Create a socket address for  server at net01 at port 5000
-//			SocketAddress socketAddress = new InetSocketAddress(ho,po);
-//			//Open a channel. NOT SERVER CHANNEL
-//			SctpChannel sctpChannel = SctpChannel.open();
-//			//Bind the channel's socket to a local port. Again this is not a server bind
-//			sctpChannel.bind(new InetSocketAddress(5000));
-//			//Connect the channel's socket to  the remote server
-//			sctpChannel.connect(socketAddress);
-//			//Before sending messages add additional information about the message
-//			MessageInfo messageInfo = MessageInfo.createOutgoing(null,0);
-//			//convert the string message into bytes and put it in the byte buffer
-//			byteBuffer.put(msg.getBytes());
-//			//Reset a pointer to point to the start of buffer 
-//			byteBuffer.flip();
-//			//Send a message in the channel (byte format)
-//			sctpChannel.send(byteBuffer,messageInfo);
-//			logger.debug("success");
-//			byteBuffer.clear();
-//		}
-//		catch(IOException ex)
-//		{
-//			logger.error("Error sending message to server at "+  ho);
-//			logger.error(ex.getMessage());
-//		}
+		//Buffer to hold messages in byte format
+		StringBuilder hostString = new StringBuilder();
+		if(!host.contains("local") && !host.contains("utdallas")){
+			hostString.append(host);
+			hostString.append(".utdallas.edu");
+		} else {
+			hostString.append(host);
+		}
+		String ho = hostString.toString();
+		
+		ByteBuffer byteBuffer = ByteBuffer.allocate(MESSAGE_SIZE);
+		int po = Integer.parseInt(port);
+		logger.debug("Sending message to server..");
+		try
+		{
+			//Create a socket address for  server at net01 at port 5000
+			SocketAddress socketAddress = new InetSocketAddress(ho,po);
+			//Open a channel. NOT SERVER CHANNEL
+			SctpChannel sctpChannel = SctpChannel.open();
+			//Bind the channel's socket to a local port. Again this is not a server bind
+			sctpChannel.bind(new InetSocketAddress(5000));
+			//Connect the channel's socket to  the remote server
+			sctpChannel.connect(socketAddress);
+			//Before sending messages add additional information about the message
+			MessageInfo messageInfo = MessageInfo.createOutgoing(null,0);
+			//convert the string message into bytes and put it in the byte buffer
+			byteBuffer.put(msg.getBytes());
+			//Reset a pointer to point to the start of buffer 
+			byteBuffer.flip();
+			//Send a message in the channel (byte format)
+			sctpChannel.send(byteBuffer,messageInfo);
+			logger.debug("success");
+			byteBuffer.clear();
+		}
+		catch(IOException ex)
+		{
+			logger.error("Error sending message to server at "+  ho);
+			logger.error(ex.getMessage());
+		}
 	}
 }
