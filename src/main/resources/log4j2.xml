@@ -16,9 +16,15 @@
     </Root>
     <Logger name="edu.utdallas.aos.p1.App" level="TRACE" additivity="false">
         <AppenderRef ref="MyFile"/>
+         <AppenderRef ref="Console"/>
     </Logger>
     <Logger name="edu.utdallas.aos.p1.ClientThread" level="TRACE" additivity="false">
         <AppenderRef ref="MyFile"/>
+         <AppenderRef ref="Console"/>
+    </Logger>
+        <Logger name="edu.utdallas.aos.p1.RequestHandler" level="TRACE" additivity="false">
+        <AppenderRef ref="MyFile"/>
+         <AppenderRef ref="Console"/>
     </Logger>
   </Loggers>
 </Configuration>
